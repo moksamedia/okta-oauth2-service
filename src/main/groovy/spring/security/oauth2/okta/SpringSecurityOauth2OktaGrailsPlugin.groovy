@@ -1,8 +1,16 @@
 package spring.security.oauth2.okta
 
+import grails.plugin.springsecurity.ReflectionUtils
+import grails.plugin.springsecurity.SpringSecurityUtils
+import grails.plugin.springsecurity.oauth2.SpringSecurityOauth2BaseService
+import grails.plugin.springsecurity.oauth2.exception.OAuth2Exception
 import grails.plugins.*
+import groovy.util.logging.Slf4j
 
+@Slf4j
 class SpringSecurityOauth2OktaGrailsPlugin extends Plugin {
+
+    def loadAfter = ['spring-security-oauth2']
 
     // the version or versions of Grails the plugin is designed for
     def grailsVersion = "3.3.3 > *"
@@ -11,60 +19,61 @@ class SpringSecurityOauth2OktaGrailsPlugin extends Plugin {
         "grails-app/views/error.gsp"
     ]
 
-    // TODO Fill in these fields
     def title = "Spring Security Oauth2 Okta" // Headline display name of the plugin
-    def author = "Your name"
-    def authorEmail = ""
+    def author = "Andrew Hughes"
+    def authorEmail = "andrew.hughes@toptal.com"
     def description = '''\
-Brief summary/description of the plugin.
+Plugin adds Okta support for OAuth in Grails
 '''
     def profiles = ['web']
 
     // URL to the plugin's documentation
     def documentation = "http://grails.org/plugin/spring-security-oauth2-okta"
+    
 
-    // Extra (optional) plugin metadata
+    Closure doWithSpring() {
+        {->
+            ReflectionUtils.application = grailsApplication
+            if (grailsApplication.warDeployed) {
+                SpringSecurityUtils.resetSecurityConfig()
+            }
+            SpringSecurityUtils.application = grailsApplication
 
-    // License: one of 'APACHE', 'GPL2', 'GPL3'
-//    def license = "APACHE"
+            // Check if there is an SpringSecurity configuration
+            def coreConf = SpringSecurityUtils.securityConfig
+            boolean printStatusMessages = (coreConf.printStatusMessages instanceof Boolean) ? coreConf.printStatusMessages : true
+            if (!coreConf || !coreConf.active) {
+                if (printStatusMessages) {
+                    println("ERROR: There is no SpringSecurity configuration or SpringSecurity is disabled")
+                    println("ERROR: Stopping configuration of SpringSecurity Oauth2")
+                }
+                return
+            }
 
-    // Details of company behind the plugin (if there is one)
-//    def organization = [ name: "My Company", url: "http://www.my-company.com/" ]
+            if (printStatusMessages) {
+                println("Configuring Spring Security OAuth2 Okta plugin...")
+            }
 
-    // Any additional developers beyond the author specified above.
-//    def developers = [ [ name: "Joe Bloggs", email: "joe@bloggs.net" ]]
-
-    // Location of the plugin's issue tracker.
-//    def issueManagement = [ system: "JIRA", url: "http://jira.grails.org/browse/GPMYPLUGIN" ]
-
-    // Online location of the plugin's browseable source code.
-//    def scm = [ url: "http://svn.codehaus.org/grails-plugins/" ]
-
-    Closure doWithSpring() { {->
-            // TODO Implement runtime spring config (optional)
+            //SpringSecurityUtils.loadSecondaryConfig('DefaultOAuth2GithubConfig')
+            
+            if (printStatusMessages) {
+                println("... finished configuring Spring Security OAuth2 Okta Plugin\n")
+            }
         }
     }
-
-    void doWithDynamicMethods() {
-        // TODO Implement registering dynamic methods to classes (optional)
-    }
+    
 
     void doWithApplicationContext() {
-        // TODO Implement post initialization spring config (optional)
+        log.trace("doWithApplicationContext")
+        SpringSecurityOauth2BaseService oAuth2BaseService = applicationContext.getBean('springSecurityOauth2BaseService', SpringSecurityOauth2BaseService)
+        OktaOAuth2Service oktaOAuth2Service = applicationContext.getBean('oktaOAuth2Service', OktaOAuth2Service)
+        try {
+            oAuth2BaseService.registerProvider(oktaOAuth2Service)
+        }
+        catch (OAuth2Exception e) {
+            log.error("There was an oAuth2Exception", e)
+            log.error("OAuth2 Github not loaded")
+        }
     }
-
-    void onChange(Map<String, Object> event) {
-        // TODO Implement code that is executed when any artefact that this plugin is
-        // watching is modified and reloaded. The event contains: event.source,
-        // event.application, event.manager, event.ctx, and event.plugin.
-    }
-
-    void onConfigChange(Map<String, Object> event) {
-        // TODO Implement code that is executed when the project configuration changes.
-        // The event is the same as for 'onChange'.
-    }
-
-    void onShutdown(Map<String, Object> event) {
-        // TODO Implement code that is executed when the application shuts down (optional)
-    }
+    
 }

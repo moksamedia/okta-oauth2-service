@@ -24,7 +24,7 @@ class OktaOAuth2Service extends OAuth2AbstractProviderService {
     }
 
     String getScopes() {
-        'user'
+        'openid profile email'
     }
 
     String getScopeSeparator() {
