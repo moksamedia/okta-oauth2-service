@@ -26,7 +26,7 @@ Application.yml
                     okta:
                         api_key: '<your key>'         
                         api_secret: '<your secret>'
-                        userInfoUrl: 'https://dev-533919.oktapreview.com/oauth2/v1/userinfo'
-                        authorizeUrl: 'https://dev-533919.oktapreview.com/oauth2/v1/authorize'
-                        tokenUrl: 'https://dev-533919.oktapreview.com/oauth2/v1/token                      
+                        userInfoUrl: 'https://<your Okta URL>.com/oauth2/v1/userinfo'
+                        authorizeUrl: 'https://<your Okta URL>.com/oauth2/v1/authorize'
+                        tokenUrl: 'https://<your Okta URL>.com/oauth2/v1/token                      
 ```
