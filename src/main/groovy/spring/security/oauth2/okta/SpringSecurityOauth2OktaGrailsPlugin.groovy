@@ -54,7 +54,7 @@ Plugin adds Okta support for OAuth in Grails
                 println("Configuring Spring Security OAuth2 Okta plugin...")
             }
 
-            //SpringSecurityUtils.loadSecondaryConfig('DefaultOAuth2GithubConfig')
+            SpringSecurityUtils.loadSecondaryConfig('DefaultOAuth2OktaConfig')
             
             if (printStatusMessages) {
                 println("... finished configuring Spring Security OAuth2 Okta Plugin\n")

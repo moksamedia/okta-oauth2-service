@@ -3,15 +3,34 @@ package spring.security.oauth2.okta
 import com.github.scribejava.core.builder.api.DefaultApi20
 import com.github.scribejava.core.model.OAuthConfig
 import com.github.scribejava.core.oauth.OAuth20Service
+import grails.core.GrailsApplication
 import groovy.util.logging.Slf4j
+import grails.util.Holders
 
 @Slf4j
 class OktaApi extends DefaultApi20 {
     
-    private static final String AUTHORIZE_URL = "https://dev-533919.oktapreview.com/oauth2/v1/authorize";
-    private static final String REQUEST_TOKEN_URL = "https://dev-533919.oktapreview.com/oauth2/v1/token";
+    private static final String AUTHORIZE_URL = "/oauth2/v1/authorize";
+    private static final String REQUEST_TOKEN_URL = "/oauth2/v1/token";
+
+    private String authorizeUrl;
+    private String tokenUrl;
 
     protected OktaApi() {
+        
+        this.authorizeUrl = Holders.getGrailsApplication().config.getProperty('grails.plugin.springsecurity.oauth2.providers.okta.authorizeUrl')
+        log.info "Okta authorizeUrl = " + this.authorizeUrl
+
+        if (!this.authorizeUrl || this.authorizeUrl == null) {
+            throw new MissingPropertyException("Please define authorizeUrl for Okta OAuth2 ('grails.plugin.springsecurity.oauth2.providers.okta.authorizeUrl')");
+        }
+
+        this.tokenUrl = Holders.getGrailsApplication().config.getProperty('grails.plugin.springsecurity.oauth2.providers.okta.tokenUrl')
+        log.info "Okta tokenUrl = " + this.tokenUrl
+
+        if (!this.tokenUrl || this.tokenUrl == null) {
+            throw new MissingPropertyException("Please define tokenUrl for Okta OAuth2 ('grails.plugin.springsecurity.oauth2.providers.okta.tokenUrl')");
+        }
     }
 
     private static class InstanceHolder {
@@ -23,18 +42,11 @@ class OktaApi extends DefaultApi20 {
     }
     
     public String getAccessTokenEndpoint() {
-        REQUEST_TOKEN_URL
+        tokenUrl
     }
 
     protected String getAuthorizationBaseUrl() {
-        AUTHORIZE_URL
-    }
-
-    @Override
-    public OAuth20Service createService(OAuthConfig config) {
-
-        log.info "OauthCallback = " + config.callback;
-        return new OAuth20Service(this, config);
+        authorizeUrl
     }
 
 }
