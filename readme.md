@@ -2,7 +2,7 @@
 
 Defines an Okta OAuth2 provider for using with Grails Spring Security.
 
-###Requires
+### Requires
 * grails-spring-security-oauth2 (https://github.com/MatrixCrawler/grails-spring-security-oauth2)
 * grails-spring-security-core (https://grails-plugins.github.io/grails-spring-security-core/)
 
@@ -11,13 +11,13 @@ Defines an Okta OAuth2 provider for using with Grails Spring Security.
     compile 'org.grails.plugins:spring-security-oauth2:1.1.0+'
 ```
 
-###Installation
+### Installation
 
 TODO: link to tutorial or write out simple steps here
 
-###Configuration
+### Configuration
 
-#####application.groovy
+##### application.groovy
 
 If you want to override the default login form and always redirect to login with Okta, 
 add the following to the application.groovy file:
@@ -26,7 +26,7 @@ add the following to the application.groovy file:
 grails.plugin.springsecurity.auth.loginFormUrl = '/springSecurityOAuth2/authenticate?provider=okta'
 ```
 
-#####Application.yml
+##### Application.yml
 
 You must configure your API key and secret from Okta as well as the following 3 URLS:
 * `/userinfo`
