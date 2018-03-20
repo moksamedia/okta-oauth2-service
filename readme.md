@@ -48,7 +48,7 @@ The OAuth2 callback defaults to `/oauth2/callback`
                         api_secret: '<your secret>'
                         userInfoUrl: 'https://<your Okta URL>.com/oauth2/v1/userinfo'
                         authorizeUrl: 'https://<your Okta URL>.com/oauth2/v1/authorize'
-                        tokenUrl: 'https://<your Okta URL>.com/oauth2/v1/token     
+                        tokenUrl: 'https://<your Okta URL>.com/oauth2/v1/token'    
                         scopes: 'email profile openid'
                  
 ```
