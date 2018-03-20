@@ -42,7 +42,7 @@ The OAuth2 callback defaults to `/oauth2/callback`
             oauth2:
                 active: true
                 registration:
-                    roleNames: ['ROLE_USER']
+                    roleNames: ['ROLE_USER'] # this is the role assigned to new users registered through OAuth
                     okta:
                         api_key: '<your key>'         
                         api_secret: '<your secret>'
