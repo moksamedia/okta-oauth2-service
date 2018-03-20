@@ -7,6 +7,7 @@ security {
                 callback = "/oauth2/okta/callback"
                 api_key = "changeme_apikey"
                 api_secret = "changeme_apisecret"
+                scopes = 'email profile openid'
             }
         }
     }
