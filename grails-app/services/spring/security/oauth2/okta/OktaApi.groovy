@@ -42,11 +42,11 @@ class OktaApi extends DefaultApi20 {
     }
     
     public String getAccessTokenEndpoint() {
-        tokenUrl
+        this.tokenUrl
     }
 
     protected String getAuthorizationBaseUrl() {
-        authorizeUrl
+        this.authorizeUrl
     }
 
 }
